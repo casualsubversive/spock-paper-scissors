@@ -1,28 +1,46 @@
-var parseGameData = function() {
-  $.get("/game.json", function(game) {
-    $(".feedback:first").html(game.outcome);
-    $(".feedback:last").html(game.round);
-    $("#player-score").text(game.player_score);
-    $("#computer-score").text(game.computer_score);
-  })
-}
+var game = {
+  playerScore: 0,
+  computerScore: 0,
+  round: 1,
+  outcome: "",
+  choices: ["kirk", "spock", "bones"],
+  defeats: ['spock', 'bones', 'kirk'],
+  randomChoice: function() {
+    var i = Math.floor(Math.random() * this.choices.length);
+    return this.choices[i];
+  },
+  winRound: function() {
+    this.round++;
+    this.playerScore++;
+  },
+  loseRound: function() {
+    this.round++;
+    this.computerScore++;
+  },
+  tieRound: function() {
+    this.round++;
+},
+  scoreRound: function(playerChoice) {
+    var computerChoice = this.randomChoice();
+    if (this.choices.indexOf(playerChoice) === this.defeats.indexOf(computerChoice)) {
+      this.winRound();
+    } else if (this.choices.indexOf(playerChoice) === this.choices.indexOf(computerChoice)) {
+      this.tieRound();
+    } else {
+      this.loseRound();
+    }
+    this.endRound();
+  },
+  endRound: function() {
+    $('#player-score').text(this.playerScore);
+    $('#computer-score').text(this.computerScore);
+    $('.feedback:first').text(this.outcome)
+    $('.feedback:last').text('Round ' + this.round + '.')
+  }
+};
 
-
-// On page load, get game data as JSON
-
-// Post player selection and retreive results as JSON
-// $(".cartoon-head").click( function() {
-//   event.preventDefault();
-//   $.post("/game.json", "name=" + event.target.id);
-// })
-
-
+// Player makes selection
 $(".cartoon-head").click( function() {
   event.preventDefault();
-  $.ajax({
-    method: "post",
-    url: "/game.json",
-    data: {name: event.target.id},
-    complete: parseGameData
-  });
+  game.scoreRound(event.target.id);
 })
