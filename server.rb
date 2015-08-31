@@ -1,6 +1,5 @@
 require "sinatra"
 require "shotgun"
-require "pry"
 
 get "/" do
 

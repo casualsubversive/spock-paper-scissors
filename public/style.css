@@ -40,6 +40,11 @@ body {
   color: white;
   }
 
+.feedback {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  }
+
 .span_1_of_7 {
   text-align: center;
   }

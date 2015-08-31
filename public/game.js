@@ -3,28 +3,68 @@ var game = {
   computerScore: 0,
   round: 1,
   outcome: "",
-  choices: ["kirk", "spock", "bones"],
+  playerChoice: "",
+  lastComputerChoice: "",
+  choices: ['kirk', 'spock', 'bones'],
   defeats: ['spock', 'bones', 'kirk'],
-  randomChoice: function() {
-    var i = Math.floor(Math.random() * this.choices.length);
-    return this.choices[i];
+  outcomes: ['<p>Kirk fascinates Spock.', '<p>Spock logics Bones.', '<p>Bones sasses Kirk.'],
+
+  // Attempts to make the computer selection feel more human.
+  semiRandomChoice: function() {
+    var index = Math.floor(Math.random() * this.choices.length);
+    var computerChoice = this.choices[index];
+
+    if (computerChoice === this.lastComputerChoice || computerChoice === this.playerChoice) {
+      var chance = Math.floor(Math.random() * 4);
+      if (chance < 2) {
+        var index = Math.floor(Math.random() * this.choices.length);
+        var computerChoice = this.choices[index];
+      }
+    }
+    this.lastComputerChoice = computerChoice;
+    if (computerChoice === this.playerChoice) {console.log('tie');}
+    return computerChoice;
   },
   winRound: function() {
+    var choice = this.playerChoice;
+    var index = this.choices.indexOf(choice);
+
     this.round++;
     this.playerScore++;
+    this.outcome = this.outcomes[index];
+    if (this.playerScore === 3) {
+      this.outcome += ("</p><p>You have defeated Khan!</p>");
+      this.victory();
+    } else {
+      this.outcome += (" You win.</p><p>Round " + this.round + ".</p>");
+    }
   },
   loseRound: function() {
+    var choice = this.playerChoice;
+    var index = this.defeats.indexOf(choice);
+
     this.round++;
     this.computerScore++;
+    this.outcome = this.outcomes[index];
+    if (this.computerScore === 3) {
+      this.outcome += ("</p><p>Khan has defeated you!</p>");
+      this.victory();
+    } else {
+      this.outcome += (" You lose.</p><p>Round " + this.round + ".</p>");
+    }
   },
   tieRound: function() {
     this.round++;
+    this.outcome = ("<p>Transporter duplicate. A tie.</p><p>Round " + this.round + ".</p>");
+
 },
-  scoreRound: function(playerChoice) {
-    var computerChoice = this.randomChoice();
-    if (this.choices.indexOf(playerChoice) === this.defeats.indexOf(computerChoice)) {
+  scoreRound: function(selection) {
+    this.playerChoice = selection;
+    var computerChoice = this.semiRandomChoice();
+
+    if (this.choices.indexOf(selection) === this.defeats.indexOf(computerChoice)) {
       this.winRound();
-    } else if (this.choices.indexOf(playerChoice) === this.choices.indexOf(computerChoice)) {
+    } else if (this.choices.indexOf(selection) === this.choices.indexOf(computerChoice)) {
       this.tieRound();
     } else {
       this.loseRound();
@@ -34,10 +74,14 @@ var game = {
   endRound: function() {
     $('#player-score').text(this.playerScore);
     $('#computer-score').text(this.computerScore);
-    $('.feedback:first').text(this.outcome)
-    $('.feedback:last').text('Round ' + this.round + '.')
+    $('#section-3').html(this.outcome)
+  },
+  victory: function() {
+    $('#section-4').hide();
   }
 };
+
+
 
 // Player makes selection
 $(".cartoon-head").click( function() {

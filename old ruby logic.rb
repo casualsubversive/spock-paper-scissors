@@ -105,7 +105,6 @@ end
 
 get "/game.json" do
   content_type :json
-
   game.round_data.to_json
 end
 
@@ -117,5 +116,4 @@ post "/game.json" do
   elsif params[:name] == "bones"
     game.pick_bones
   end
-
 end
