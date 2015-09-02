@@ -1,16 +1,16 @@
 @font-face {
   font-family: 'Final Frontier Oldstyle';
-  src: url('resources/finalold.ttf') format('truetype');
+  src: url('resources/fonts/finalold.ttf') format('truetype');
   }
 
 @font-face {
   font-family: 'Federation';
-  src: url('resources/Federation.ttf') format('truetype');
+  src: url('resources/fonts/Federation.ttf') format('truetype');
   }
 
 body {
   margin: 0;
-  background-color: black;
+  background-color: rgb(34, 32, 0);
   }
 
 #section-1 {
@@ -40,10 +40,9 @@ body {
   color: white;
   }
 
-.feedback {
-  margin-top: 8px;
-  margin-bottom: 8px;
-  }
+.cartoon-head {
+  max-width: 100%;
+}
 
 .span_1_of_7 {
   text-align: center;
