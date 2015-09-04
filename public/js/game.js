@@ -84,7 +84,7 @@ var game = {
 
 
 // Player makes selection
-$(".cartoon-head").click( function() {
+$(".cartoon").click( function() {
   event.preventDefault();
   game.scoreRound(event.target.id);
 })
